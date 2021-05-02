@@ -78,7 +78,7 @@ function Auth() {
         );
 
         console.log(responseData);
-        auth.login(responseData.user.id);
+        auth.login(responseData.userId, responseData.token);
       } catch (err) {
         console.log(err);
       }
@@ -96,7 +96,7 @@ function Auth() {
           }
         );
         console.log(responseData);
-        auth.login(responseData.user.id);
+        auth.login(responseData.userId, responseData.token);
       } catch (err) {
         console.log(err);
       }
