@@ -7,7 +7,6 @@ import Map from "../../shared/components/UIElements/Map";
 import { AuthContext } from "../../shared/context/auth-context";
 import "./PlaceItem.css";
 import { useHttpClient } from "../../shared/hooks/http-hook";
-import { useHistory } from "react-router";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
 
@@ -15,7 +14,6 @@ function PlaceItem(props) {
   const auth = useContext(AuthContext);
   const [showMap, setShowMap] = useState(false);
   const { isLoading, error, clearError, sendRequest } = useHttpClient();
-  const history = useHistory();
 
   const openMapHandler = () => setShowMap(true);
 
@@ -29,11 +27,15 @@ function PlaceItem(props) {
 
   const confirmDeleteHandler = async () => {
     closeWarningHandler();
+    console.log(auth.token)
     try {
       const responseData = await sendRequest(
         `http://localhost:5000/api/places/${props.id}`,
         "DELETE",
-        null
+        null,
+        {
+          Authorization: "Bearer " + auth.token,
+        }
       );
       console.log(responseData);
       props.getPlaces();

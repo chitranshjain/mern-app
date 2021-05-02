@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router-dom";
 
 import Input from "../../shared/components/FormElements/Input";
@@ -13,11 +13,13 @@ import "./PlaceForm.css";
 import { useHttpClient } from "../../shared/hooks/http-hook";
 import LoadingSpinner from "../../shared/components/UIElements/LoadingSpinner";
 import ErrorModal from "../../shared/components/UIElements/ErrorModal";
+import { AuthContext } from "../../shared/context/auth-context";
 
 function UpdatePlace() {
   const placeId = useParams().placeId;
   const [identifiedPlace, setIdentifiedPlace] = useState();
   const { isLoading, error, clearError, sendRequest } = useHttpClient();
+  const auth = useContext(AuthContext);
 
   const [formState, inputChangeHandler, setFormData] = useForm(
     {
@@ -81,6 +83,7 @@ function UpdatePlace() {
 
   const placeUpdateSubmitHandler = async (event) => {
     event.preventDefault();
+    console.log(auth.token);
     try {
       const responseData = await sendRequest(
         `http://localhost:5000/api/places/${placeId}`,
@@ -91,6 +94,7 @@ function UpdatePlace() {
         }),
         {
           "Content-Type": "application/json",
+          Authorization: "Bearer " + auth.token,
         }
       );
 
